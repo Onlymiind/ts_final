@@ -1,5 +1,11 @@
 export interface ISummary {
     income: number
-    expense: number
+    expenses: number
     balance: number
+}
+
+export interface ISummarizable {
+    getSummary(): ISummary
+
+    getSummaryString(): string
 }

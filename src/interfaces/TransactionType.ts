@@ -1,3 +1,3 @@
 export const enum TransactionType {
-    INCOME, EXPENSE
+    INCOME = 'income', EXPENSE = 'expense'
 }

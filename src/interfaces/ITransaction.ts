@@ -6,4 +6,6 @@ export interface ITransaction {
     type: TransactionType
     date: string
     description: string
+
+    toString(): string
 }
