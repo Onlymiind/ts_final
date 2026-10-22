@@ -11,7 +11,9 @@
   },
   "devDependencies": {
     "@types/moment": "^2.11.29",
+    "@types/node": "^26.6.5",
     "@types/uuid": "^10.0.0",
+    "fs": "^0.0.1-security",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },

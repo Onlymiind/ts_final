@@ -3,6 +3,9 @@ import { AccountUpdate, IAccount } from '../interfaces/IAccount'
 import { ISummary } from '../interfaces/ISummary'
 import { ITransaction } from '../interfaces/ITransaction'
 import { TransactionType } from '../interfaces/TransactionType'
+import { open } from 'fs/promises'
+import { escapeCsvValue } from '../utils/escapeCsvValue'
+import moment from 'moment'
 
 export class Account implements IAccount {
     private transactions: ITransaction[] = []
@@ -62,5 +65,29 @@ export class Account implements IAccount {
         }
 
         return result
+    }
+
+    async exportTransactionsToCSV(filename: string): Promise<void> {
+        const headlines: (keyof ITransaction)[] = ["id", "amount", "type", "date", "description"]
+
+        const file = await open(filename, 'w', 0o666)
+        let writePromise = file.appendFile(headlines.join(",") + "\n")
+
+        for (const transaction of this.transactions) {
+            const line: string[] = []
+            for (const propName of headlines) {
+                const val = transaction[propName]
+                if (typeof val === 'number' || typeof val === 'string') {
+                    line.push(escapeCsvValue(val))
+                } else if (moment.isMoment(val)) {
+                    line.push(escapeCsvValue(val.format('YYYY-MM-DD')))
+                } else {
+                    console.error('unknown value type', val)
+                }
+            }
+
+            await writePromise
+            writePromise = file.appendFile(line.join(",") + "\n")
+        }
     }
 }

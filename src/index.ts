@@ -34,3 +34,9 @@ console.log('Лимит трат:', limits.expense)
 const transactionParams: TransactionConstructorParams = [500, TransactionType.EXPENSE, 'Покупка', moment('2023-02-01T00:00:00Z')]
 const newTransaction: TransactionInstance = new Transaction(...transactionParams)
 console.log(newTransaction.toString())
+
+try {
+    personalAccount.exportTransactionsToCSV('main_account.csv')
+} catch (error: unknown) {
+    console.log("В процессе записи произошла ошибка", (error as Error).message)
+}
