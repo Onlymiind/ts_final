@@ -17,19 +17,19 @@ export class AccountManager implements IAccountManager {
         return this.getStat('balance')
     }
 
-    addAccount(account: IAccount): void {
+    add(account: IAccount): void {
         this.accounts.push(account)
     }
 
-    removeAccountById(id: number): void {
+    removeById(id: string): void {
         this.accounts = this.accounts.filter((account) => account.id !== id)
     }
 
-    getAccounts(): IAccount[] {
+    getAll(): IAccount[] {
         return this.accounts
     }
 
-    getAccountById(id: number): IAccount | undefined {
+    getById(id: string): IAccount | undefined {
         return this.accounts.find((account) => account.id === id)
     }
 

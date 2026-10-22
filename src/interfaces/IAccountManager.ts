@@ -1,13 +1,9 @@
 import { IAccount } from "./IAccount"
 import { ISummarizable } from "./ISummary"
+import { IStorage } from './utility-types'
 
-export interface IAccountManager extends ISummarizable {
+export interface IAccountManager extends ISummarizable, IStorage<IAccount> {
     readonly income: number
     readonly expenses: number
     readonly balance: number
-
-    addAccount(account: IAccount): void
-    removeAccountById(id: number): void
-    getAccounts(): IAccount[]
-    getAccountById(id: number): IAccount | undefined
 }

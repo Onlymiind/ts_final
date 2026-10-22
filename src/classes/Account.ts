@@ -1,27 +1,38 @@
-import { IAccount } from '../interfaces/IAccount'
+import { v4 } from 'uuid'
+import { AccountUpdate, IAccount } from '../interfaces/IAccount'
 import { ISummary } from '../interfaces/ISummary'
 import { ITransaction } from '../interfaces/ITransaction'
 import { TransactionType } from '../interfaces/TransactionType'
 
 export class Account implements IAccount {
     private transactions: ITransaction[] = []
+    public readonly id: string = v4()
 
     constructor(
-        public readonly id: number,
-        public readonly name: string,
+        public name: string,
     ) { }
 
+    update(vals: AccountUpdate): void {
+        if (vals.name !== undefined) {
+            this.name = vals.name
+        }
+    }
 
-    addTransaction(transaction: ITransaction): void {
+
+    add(transaction: ITransaction): void {
         this.transactions.push(transaction)
     }
 
-    removeTransactionById(id: number): void {
+    removeById(id: string): void {
         this.transactions = this.transactions.filter((transaction: ITransaction) => transaction.id !== id)
     }
 
-    getTransactions(): ITransaction[] {
+    getAll(): ITransaction[] {
         return this.transactions
+    }
+
+    getById(id: string): ITransaction | undefined {
+        return this.transactions.find((transaction) => transaction.id === id)
     }
 
     getSummary(): ISummary {
