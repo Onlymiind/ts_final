@@ -38,7 +38,7 @@ export class AccountManager implements IAccountManager {
             income: prev.income + current.income,
             expenses: prev.expenses + current.expenses,
             balance: prev.balance + current.balance
-        } as ISummary))
+        } as ISummary), { income: 0, expenses: 0, balance: 0 })
     }
 
     getSummaryString(): string {
@@ -47,6 +47,6 @@ export class AccountManager implements IAccountManager {
     }
 
     private getStat(name: keyof ISummary): number {
-        return this.accounts.map((account) => account.getSummary()[name]).reduce((prev, current) => prev + current)
+        return this.accounts.map((account) => account.getSummary()[name]).reduce((prev, current) => prev + current, 0)
     }
 }

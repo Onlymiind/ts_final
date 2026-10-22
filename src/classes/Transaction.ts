@@ -11,7 +11,7 @@ export class Transaction implements ITransaction {
         public amount: number,
         public type: TransactionType,
         public description: string | null = null,
-        public date: moment.Moment = moment.unix(moment.now()),
+        public date: moment.Moment = moment(),
     ) { }
 
     update(vals: TransactionUpdate): void {

@@ -3,7 +3,7 @@ import { AccountUpdate, IAccount } from '../interfaces/IAccount'
 import { ISummary } from '../interfaces/ISummary'
 import { ITransaction } from '../interfaces/ITransaction'
 import { TransactionType } from '../interfaces/TransactionType'
-import { open } from 'fs/promises'
+import { writeFile } from 'fs/promises'
 import { escapeCsvValue } from '../utils/escapeCsvValue'
 import moment from 'moment'
 
@@ -68,26 +68,12 @@ export class Account implements IAccount {
     }
 
     async exportTransactionsToCSV(filename: string): Promise<void> {
-        const headlines: (keyof ITransaction)[] = ["id", "amount", "type", "date", "description"]
+        const headlines: (keyof Pick<ITransaction, "id" | "amount" | "type" | "date" | "description">)[] = ["id", "amount", "type", "date", "description"]
 
-        const file = await open(filename, 'w', 0o666)
-        let writePromise = file.appendFile(headlines.join(",") + "\n")
-
-        for (const transaction of this.transactions) {
-            const line: string[] = []
-            for (const propName of headlines) {
-                const val = transaction[propName]
-                if (typeof val === 'number' || typeof val === 'string') {
-                    line.push(escapeCsvValue(val))
-                } else if (moment.isMoment(val)) {
-                    line.push(escapeCsvValue(val.format('YYYY-MM-DD')))
-                } else {
-                    console.error('unknown value type', val)
-                }
-            }
-
-            await writePromise
-            writePromise = file.appendFile(line.join(",") + "\n")
-        }
+        const rows = this.transactions.map(transaction => headlines.map(propName => {
+            const value = transaction[propName]
+            return escapeCsvValue(moment.isMoment(value) ? value.format('YYYY-MM-DD') : value ?? '')
+        }).join(','))
+        await writeFile(filename, [headlines.join(','), ...rows].join('\n') + '\n', 'utf8')
     }
 }
