@@ -3,6 +3,7 @@ import { Transaction, TransactionConstructorParams, TransactionInstance } from '
 import { AccountManager } from './classes/AccountManager'
 import { TransactionType, limits } from './interfaces/TransactionType'
 import moment from 'moment'
+import { IsIncome, ITransaction, OptionalTransaction, ReadonlyTransaction, TransactionFieldType } from './interfaces/ITransaction'
 
 const personalAccount = new Account('Личный бюджет')
 const transaction: Transaction = new Transaction(1000, TransactionType.INCOME, 'Зарплата', moment('2023-01-01T00:00:00Z'))
